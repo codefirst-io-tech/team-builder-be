@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { Organization } from '../organization/organization.entity';
 
 @Entity()
@@ -21,6 +21,6 @@ export class Member {
   @Column({ nullable: true })
   position: string;
 
-  @ManyToOne(() => Organization, (organization) => organization.members)
-  organization: Organization;
+  @ManyToMany(() => Organization, (organization) => organization.members)
+  organizations: Organization[];
 }

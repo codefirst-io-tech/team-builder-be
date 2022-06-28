@@ -2,9 +2,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   OneToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Member } from '../member/member.entity';
 
@@ -16,7 +17,8 @@ export class Organization {
   @Column()
   name: string;
 
-  @OneToMany(() => Member, (member) => member.organization)
+  @ManyToMany(() => Member, (member) => member.organizations)
+  @JoinTable()
   members: Member[];
 
   @OneToOne(() => Member)
