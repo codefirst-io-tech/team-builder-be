@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Team } from 'src/team/team.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Organization } from '../organization/organization.entity';
 
 @Entity()
@@ -23,4 +30,8 @@ export class Member {
 
   @ManyToMany(() => Organization, (organization) => organization.members)
   organizations: Organization[];
+
+  @ManyToMany(() => Team, (team) => team.members)
+  @JoinTable()
+  teams: Team[];
 }

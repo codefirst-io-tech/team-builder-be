@@ -1,3 +1,4 @@
+import { Match } from 'src/match/match.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,6 +7,7 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Member } from '../member/member.entity';
 
@@ -24,4 +26,7 @@ export class Organization {
   @OneToOne(() => Member)
   @JoinColumn()
   adminMember: Member;
+
+  @OneToMany(() => Match, (match) => match.organization)
+  matches: Match[];
 }

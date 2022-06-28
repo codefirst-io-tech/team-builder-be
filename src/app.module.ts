@@ -4,8 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Match } from './match/match.entity';
 import { Member } from './member/member.entity';
 import { Organization } from './organization/organization.entity';
+import { Team } from './team/team.entity';
 
 @Module({
   imports: [
@@ -34,7 +36,7 @@ import { Organization } from './organization/organization.entity';
           port: databasePort,
           username: databaseUser,
           password: databasePassword,
-          entities: [Organization, Member],
+          entities: [Organization, Member, Match, Team],
           synchronize: true,
           type: 'postgres',
         } as PostgresConnectionOptions;
