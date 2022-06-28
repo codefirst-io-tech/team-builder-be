@@ -1,13 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { Match } from './match/match.entity';
+import { MemberModule } from './member/member.module';
+import { MatchModule } from './match/match.module';
+import { OrganizationModule } from './organization/organization.module';
+import { TeamModule } from './team/team.module';
+import { MemberService } from './member/member.service';
+import { OrganizationService } from './organization/organization.service';
 import { Member } from './member/member.entity';
 import { Organization } from './organization/organization.entity';
-import { Team } from './team/team.entity';
 
 @Module({
   imports: [
@@ -36,14 +38,41 @@ import { Team } from './team/team.entity';
           port: databasePort,
           username: databaseUser,
           password: databasePassword,
-          entities: [Organization, Member, Match, Team],
+          autoLoadEntities: true,
           synchronize: true,
           type: 'postgres',
         } as PostgresConnectionOptions;
       },
     }),
+    MemberModule,
+    MatchModule,
+    OrganizationModule,
+    TeamModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
 })
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+  constructor(
+    private readonly memberService: MemberService,
+    private readonly organizationService: OrganizationService,
+  ) {}
+
+  onApplicationBootstrap() {
+    const organization = new Organization();
+    organization.name = 'codefirst.io';
+
+    this.organizationService
+      .save(organization)
+      .subscribe((organization: Organization) => {
+        console.log({ organization });
+
+        const member = new Member();
+        member.username = 'immino';
+        member.organizations = [organization];
+
+        this.memberService.save(member).subscribe((member: Member) => {
+          console.log({ member });
+        });
+      });
+  }
+}
