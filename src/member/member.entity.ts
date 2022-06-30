@@ -1,3 +1,4 @@
+import { Match } from 'src/match/match.entity';
 import { Team } from 'src/team/team.entity';
 import {
   Entity,
@@ -34,4 +35,8 @@ export class Member {
   @ManyToMany(() => Team, (team) => team.members)
   @JoinTable()
   teams: Team[];
+
+  @ManyToMany(() => Match, (match) => match.members)
+  @JoinTable()
+  matches: Match[];
 }
