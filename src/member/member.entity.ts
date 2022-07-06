@@ -29,7 +29,9 @@ export class Member {
   @Column({ nullable: true })
   position: string;
 
-  @ManyToMany(() => Organization, (organization) => organization.members)
+  @ManyToMany(() => Organization, (organization) => organization.members, {
+    cascade: true,
+  })
   organizations: Organization[];
 
   @ManyToMany(() => Team, (team) => team.members)

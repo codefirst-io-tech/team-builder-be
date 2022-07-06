@@ -8,8 +8,6 @@ import { OrganizationModule } from './organization/organization.module';
 import { TeamModule } from './team/team.module';
 import { MemberService } from './member/member.service';
 import { OrganizationService } from './organization/organization.service';
-import { Member } from './member/member.entity';
-import { Organization } from './organization/organization.entity';
 
 @Module({
   imports: [
@@ -23,14 +21,6 @@ import { Organization } from './organization/organization.entity';
         const databaseName = config.get('DATABASE_NAME');
         const databaseUser = config.get('DATABASE_USER');
         const databasePassword = config.get('DATABASE_PASSWORD');
-
-        console.log(
-          databaseHost,
-          databasePort,
-          databaseName,
-          databaseUser,
-          databasePassword,
-        );
 
         return {
           database: databaseName,
@@ -58,21 +48,18 @@ export class AppModule implements OnApplicationBootstrap {
   ) {}
 
   onApplicationBootstrap() {
-    const organization = new Organization();
-    organization.name = 'codefirst.io';
-
-    this.organizationService
-      .save(organization)
-      .subscribe((organization: Organization) => {
-        console.log({ organization });
-
-        const member = new Member();
-        member.username = 'immino';
-        member.organizations = [organization];
-
-        this.memberService.save(member).subscribe((member: Member) => {
-          console.log({ member });
-        });
-      });
+    // const organization = new Organization();
+    // organization.name = 'codefirst.io';
+    // this.organizationService
+    //   .save(organization)
+    //   .subscribe((organization: Organization) => {
+    //     console.log({ organization });
+    //     const member = new Member();
+    //     member.username = 'immino';
+    //     member.organizations = [organization];
+    //     this.memberService.save(member).subscribe((member: Member) => {
+    //       console.log({ member });
+    //     });
+    //   });
   }
 }

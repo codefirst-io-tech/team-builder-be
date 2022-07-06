@@ -11,7 +11,20 @@ export class MemberService {
     private memberRepository: Repository<Member>,
   ) {}
 
+  get(id: number) {
+    return from(
+      this.memberRepository.findOne({
+        where: { id },
+        relations: ['organizations', 'teams', 'matches'],
+      }),
+    );
+  }
+
   save(member: Member): Observable<Member> {
     return from(this.memberRepository.save(member));
+  }
+
+  update(id: number, member: Member) {
+    return from(this.memberRepository.update({ id: member.id }, member));
   }
 }

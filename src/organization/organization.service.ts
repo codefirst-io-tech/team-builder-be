@@ -11,6 +11,15 @@ export class OrganizationService {
     private organizationRepository: Repository<Organization>,
   ) {}
 
+  get(id: number) {
+    return from(
+      this.organizationRepository.findOne({
+        where: { id },
+        relations: ['members', 'matches'],
+      }),
+    );
+  }
+
   save(organization: Organization): Observable<Organization> {
     return from(this.organizationRepository.save(organization));
   }
