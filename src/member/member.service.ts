@@ -1,30 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, from } from 'rxjs';
-import { Repository } from 'typeorm';
-import { Member } from './member.entity';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MemberService {
-  constructor(
-    @InjectRepository(Member)
-    private memberRepository: Repository<Member>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  get(id: number) {
-    return from(
-      this.memberRepository.findOne({
-        where: { id },
-        relations: ['organizations', 'teams', 'matches'],
-      }),
-    );
+  async get(memberswhereUniqueInput: Prisma.MemberWhereUniqueInput) {
+    return await this.prisma.member.findFirst({
+      where: memberswhereUniqueInput,
+    });
   }
 
-  save(member: Member): Observable<Member> {
-    return from(this.memberRepository.save(member));
+  async save(member: Prisma.MemberCreateInput) {
+    return await this.prisma.member.create({
+      data: {
+        ...member,
+      },
+    });
   }
 
-  update(id: number, member: Member) {
-    return from(this.memberRepository.update({ id: member.id }, member));
+  async update(id: number, member: Prisma.MemberUpdateInput) {
+    throw new NotImplementedException();
   }
 }

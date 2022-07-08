@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Match } from './match.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { MatchController } from './match.controller';
 import { MatchService } from './match.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Match])],
-  providers: [MatchService],
+  providers: [MatchService, PrismaService],
   controllers: [MatchController],
   exports: [MatchService],
 })

@@ -1,30 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, from } from 'rxjs';
-import { Repository } from 'typeorm';
-import { Organization } from './organization.entity';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class OrganizationService {
-  constructor(
-    @InjectRepository(Organization)
-    private organizationRepository: Repository<Organization>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  get(id: number) {
-    return from(
-      this.organizationRepository.findOne({
-        where: { id },
-        relations: ['members', 'matches'],
-      }),
-    );
+  async get(organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput) {
+    return await this.prisma.organization.findFirst({
+      where: organizationWhereUniqueInput,
+    });
   }
 
-  save(organization: Organization): Observable<Organization> {
-    return from(this.organizationRepository.save(organization));
+  async save(organization: Prisma.OrganizationCreateInput) {
+    return await this.prisma.organization.create({
+      data: {
+        ...organization,
+      },
+    });
   }
 
-  getByName(name: string): Observable<Organization> {
-    return from(this.organizationRepository.findOneBy({ name }));
+  async getByName(name: string) {
+    throw new NotImplementedException();
   }
 }

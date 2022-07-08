@@ -1,7 +1,5 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { ConfigModule } from '@nestjs/config';
 import { MemberModule } from './member/member.module';
 import { MatchModule } from './match/match.module';
 import { OrganizationModule } from './organization/organization.module';
@@ -12,28 +10,6 @@ import { OrganizationService } from './organization/organization.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        const databaseHost = config.get('DATABASE_HOST');
-        const databasePort = config.get('DATABASE_PORT');
-        const databaseName = config.get('DATABASE_NAME');
-        const databaseUser = config.get('DATABASE_USER');
-        const databasePassword = config.get('DATABASE_PASSWORD');
-
-        return {
-          database: databaseName,
-          host: databaseHost,
-          port: databasePort,
-          username: databaseUser,
-          password: databasePassword,
-          autoLoadEntities: true,
-          synchronize: true,
-          type: 'postgres',
-        } as PostgresConnectionOptions;
-      },
-    }),
     MemberModule,
     MatchModule,
     OrganizationModule,

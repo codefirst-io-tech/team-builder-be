@@ -1,17 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { Repository } from 'typeorm';
-import { Match } from './match.entity';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MatchService {
-  constructor(
-    @InjectRepository(Match)
-    private matchRepository: Repository<Match>,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
-  save(match: Match): Observable<Match> {
-    return from(this.matchRepository.save(match));
+  save() {
+    throw new NotImplementedException();
   }
 }

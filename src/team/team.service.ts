@@ -1,17 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, from } from 'rxjs';
-import { Repository } from 'typeorm';
-import { Team } from './team.entity';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TeamService {
-  constructor(
-    @InjectRepository(Team)
-    private teamRepository: Repository<Team>,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
-  save(team: Team): Observable<Team> {
-    return from(this.teamRepository.save(team));
+  save() {
+    throw new NotImplementedException();
   }
 }
