@@ -9,6 +9,9 @@ export class OrganizationService {
   async get(organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput) {
     return await this.prisma.organization.findFirst({
       where: organizationWhereUniqueInput,
+      include: {
+        members: true,
+      },
     });
   }
 

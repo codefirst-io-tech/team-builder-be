@@ -17,7 +17,7 @@ model Member {
   strength    String?
   email       String?
   // teams?       Team[]
-  // organizations? Organization[]
+  organizations Organization[]
   // matches?     Match[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -27,7 +27,7 @@ model Organization {
   id          Int @id @default(autoincrement())
   name        String
   // adminMember? Member
-  // members?     Member[]
+  members     Member[]
   // matches?     Match[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())

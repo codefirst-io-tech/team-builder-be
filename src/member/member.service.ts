@@ -1,26 +1,46 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { Member, Organization, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+
+type MemberUpdateDto = Member & { organizations: Organization[] };
 
 @Injectable()
 export class MemberService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async get(memberswhereUniqueInput: Prisma.MemberWhereUniqueInput) {
-    return await this.prisma.member.findFirst({
-      where: memberswhereUniqueInput,
+  async get(membersWhereUniqueInput: Prisma.MemberWhereUniqueInput) {
+    return this.prisma.member.findFirst({
+      where: membersWhereUniqueInput,
+      include: {
+        organizations: true,
+      },
     });
   }
 
   async save(member: Prisma.MemberCreateInput) {
-    return await this.prisma.member.create({
+    return this.prisma.member.create({
       data: {
         ...member,
       },
     });
   }
 
-  async update(id: number, member: Prisma.MemberUpdateInput) {
-    throw new NotImplementedException();
+  async update(id: number, member: MemberUpdateDto) {
+    return this.prisma.member.update({
+      include: {
+        organizations: true,
+      },
+      where: {
+        id,
+      },
+      data: {
+        ...member,
+        organizations: {
+          set: member.organizations.map((organization) => ({
+            id: organization.id,
+          })),
+        },
+      },
+    });
   }
 }

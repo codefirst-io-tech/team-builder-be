@@ -17,7 +17,7 @@ export class MemberController {
   }
 
   @Put('/:id')
-  update(@Param('id') id: number, @Body() member: Prisma.MemberUpdateInput) {
-    return this.memberService.update(id, member);
+  update(@Param('id') id: string, @Body() member: any) {
+    return this.memberService.update(+id, member);
   }
 }
